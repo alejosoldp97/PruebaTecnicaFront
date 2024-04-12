@@ -20,7 +20,7 @@ const PaginationComponent = ({ totalPages, currentPage, onPageChange }) => {
           if (isWithinRange) {
             return (
               <PaginationItem key={index + 1}  >
-                <PaginationLink onClick={() => onPageChange(page)} isActive={isCurrent} >{page}</PaginationLink> 
+                <PaginationLink  onClick={() => onPageChange(page)} isActive={isCurrent} >{page}</PaginationLink> 
               </PaginationItem>
             );
           } else if (index === 0 || index === pages.length - 1) {

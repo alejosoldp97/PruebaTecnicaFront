@@ -10,12 +10,16 @@ import Select from 'react-select'
 import PaginationComponent from './components/PaginationComponent'
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, } from './src/components/ui/dialog'
 import { Textarea } from './src/components/ui/textarea'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const [count, setCount] = useState(0)
   const [earthquakes, setEarthquakes] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
   const [perPage, setPerPage] = useState(10)
+  const [dialogVisible, setDialogVisible] = useState(false);
+  const [dialogMessage, setDialogMessage] = useState('');
   const [data, setData] = useState({
     earthquacke_id: '',
     body: ''
@@ -63,7 +67,6 @@ function App() {
       setCurrentPage(data.pagination.current_page);
       setPerPage(data.pagination.per_page);
       setTotalPages(data.pagination.total);
-      console.log(data)
     } catch (error) {
       console.error('Error fetching earthquake data:', error);
     }
@@ -83,15 +86,13 @@ function App() {
   },[])
 
   const handleEarthquackeId = (eId) =>{
-    setData({...data, earthquacke_id: eId})
+    setData({...data, earthquacke_id: eId, body:''})
   }
 
   const handleCommentArea = (e) =>{
-    console.log(e.target)
     const {value} = e.target
     setData({...data, body: value})
   }
-  console.log(data)
   const handleSubmitComment = async (id) => {
   
     
@@ -105,11 +106,42 @@ function App() {
       // Comentario creado correctamente
       //setContent(''); // Limpiar el campo de comentarios
       console.log('Comentario creado!');
+      toast.success('Comentario creado!', {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: undefined,
+        });
+      setDialogMessage('Comentario creado correctamente');
     } else {
       // Error al crear el comentario
       const errorData = await response.json();
       console.error('Error al crear el comentario:', errorData);
+      setDialogMessage('Error al crear el comentario');
+      toast.error('Error al crear el comentario', {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: undefined,
+        });
     }
+
+    setDialogVisible(true);
+
+  };
+
+  const handleCloseDialog = () => {
+    setDialogVisible(false);
   };
 
   return (
@@ -146,7 +178,7 @@ function App() {
           <TableBody>
             {
               earthquakes.map((earthquake) =>(
-                <TableRow>
+                <TableRow key={earthquake.attributes.title}>
                   <TableCell >{earthquake.attributes.title}</TableCell>
                   <TableCell >{earthquake.attributes.place}</TableCell>
                   <TableCell>{earthquake.attributes.magnitude}</TableCell>
@@ -155,7 +187,7 @@ function App() {
                   <TableCell>{earthquake.attributes.coordinates.longitude}</TableCell>
                   <TableCell>                                         
                       <Dialog>
-                        <DialogTrigger asChild><Button variant="outline" onClick={() => handleEarthquackeId(earthquake.id)} > Agregar un comentario</Button></DialogTrigger>
+                        <DialogTrigger asChild><Button variant="secondary" onClick={() => handleEarthquackeId(earthquake.id)} > Agregar un comentario</Button></DialogTrigger>
                         <DialogContent className="sm:max-w-[600px]">
                           <DialogHeader>
                             <DialogTitle>Añade tu comentario del sismo {earthquake.attributes.title}</DialogTitle>
@@ -169,7 +201,9 @@ function App() {
                                   Cancelar
                                 </Button>
                               </DialogClose>
-                              <Button onClick={() => handleSubmitComment(earthquake.id)} >Guardar</Button>
+                              <DialogClose asChild>
+                                <Button onClick={() => handleSubmitComment(earthquake.id)} >Guardar</Button>
+                              </DialogClose>
                             </DialogFooter>
                         </DialogContent>
                       </Dialog>                      
@@ -181,8 +215,18 @@ function App() {
             }
           </TableBody>
         </Table>
-
-
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"
+        />
       </div>
     </>
   )
