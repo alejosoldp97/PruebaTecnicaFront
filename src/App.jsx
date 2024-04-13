@@ -12,14 +12,15 @@ import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, Di
 import { Textarea } from './src/components/ui/textarea'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { TextField } from '@mui/material'
 
 function App() {
   const [count, setCount] = useState(0)
   const [earthquakes, setEarthquakes] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
   const [perPage, setPerPage] = useState(10)
-  const [dialogVisible, setDialogVisible] = useState(false);
-  const [dialogMessage, setDialogMessage] = useState('');
+  const [error, setError] = useState(false)
+  const [itemsValue, setItemsValue] = useState('')
   const [data, setData] = useState({
     earthquacke_id: '',
     body: ''
@@ -105,7 +106,6 @@ function App() {
     if (response.ok) {
       // Comentario creado correctamente
       //setContent(''); // Limpiar el campo de comentarios
-      console.log('Comentario creado!');
       toast.success('Comentario creado!', {
         position: "top-center",
         autoClose: 2000,
@@ -121,7 +121,6 @@ function App() {
     } else {
       // Error al crear el comentario
       const errorData = await response.json();
-      console.error('Error al crear el comentario:', errorData);
       setDialogMessage('Error al crear el comentario');
       toast.error('Error al crear el comentario', {
         position: "top-center",
@@ -136,18 +135,38 @@ function App() {
         });
     }
 
-    setDialogVisible(true);
+     
 
   };
 
-  const handleCloseDialog = () => {
-    setDialogVisible(false);
-  };
+  const handleItemsChange = (event) => {
+    const value = event.target.value;
+    setItemsValue(value);
+    // Validar si el valor está dentro del rango deseado (0 a 1000)
+    if (value < 0 || value > 1000 || isNaN(value)) {
+      setError(true);
+    } else {
+      setError(false);
+    }
+  }; 
 
   return (
     <>
       <div>
         <h1 className=' text-5xl'>Información Sísmica</h1>
+      </div>
+      <div className=' mt-5 flex items-center justify-center gap-5'>
+        <span className=' '>Selecciona el número de items por página: </span>
+        <TextField className=' h-30'
+            type="number"
+            onChange={(e) => handleItemsChange(e)}
+            error = {error}
+            required
+            id="outlined-required"
+            label="Items por página"
+            defaultValue={10}
+          />
+          <Button>Establecer Valor</Button>
       </div>
       <div className=' py-6'>
         <PaginationComponent
@@ -185,9 +204,9 @@ function App() {
                   <TableCell>{earthquake.attributes.mag_type}</TableCell>
                   <TableCell>{earthquake.attributes.coordinates.latitude}</TableCell>                  
                   <TableCell>{earthquake.attributes.coordinates.longitude}</TableCell>
-                  <TableCell>                                         
+                  <TableCell className=' gap-2'>                                         
                       <Dialog>
-                        <DialogTrigger asChild><Button variant="secondary" onClick={() => handleEarthquackeId(earthquake.id)} > Agregar un comentario</Button></DialogTrigger>
+                        <DialogTrigger asChild><Button variant="secondary" className='w-52' onClick={() => handleEarthquackeId(earthquake.id)} > Agregar un comentario</Button></DialogTrigger>
                         <DialogContent className="sm:max-w-[600px]">
                           <DialogHeader>
                             <DialogTitle>Añade tu comentario del sismo {earthquake.attributes.title}</DialogTitle>
@@ -206,7 +225,8 @@ function App() {
                               </DialogClose>
                             </DialogFooter>
                         </DialogContent>
-                      </Dialog>                      
+                      </Dialog> 
+                      <Button className=' mt-2 w-52'> Ver Comentarios</Button>                     
                   </TableCell>
                 </TableRow>
 
