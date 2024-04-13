@@ -13,6 +13,7 @@ import { Textarea } from './src/components/ui/textarea'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { TextField } from '@mui/material'
+import CommentsList from './components/CommentsList'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -21,6 +22,7 @@ function App() {
   const [perPage, setPerPage] = useState(10)
   const [error, setError] = useState(false)
   const [itemsValue, setItemsValue] = useState(10)
+  const [bodyComments, setBodyComments] = useState([])
   const [data, setData] = useState({
     earthquacke_id: '',
     body: ''
@@ -79,7 +81,6 @@ function App() {
       const data = await response.json();
       setEarthquakes(data.data);
       setCurrentPage(data.pagination.current_page);
-      setPerPage(data.pagination.per_page);
       setTotalPages(data.pagination.total);
     } catch (error) {
       console.error('Error fetching earthquake data:', error);
@@ -95,6 +96,19 @@ function App() {
     const {value} = e.target
     setData({...data, body: value})
   }
+
+  const fetchGetComments = async (eId) => {
+    try {
+      const response = await fetch(`http://localhost:3000/comments?earthquake_id=${eId}`);
+      const data = await response.json();
+      console.log(data)
+      setBodyComments(data)
+    } catch (error) {
+      console.error('Error fetching comments data:', error);
+    }
+
+  }
+
   const handleSubmitComment = async (id) => {
   
     
@@ -247,7 +261,25 @@ function App() {
                             </DialogFooter>
                         </DialogContent>
                       </Dialog> 
-                      <Button className=' mt-2 w-52'> Ver Comentarios</Button>                     
+
+                      <Dialog>
+                        <DialogTrigger asChild><Button className='w-52' onClick={() => fetchGetComments(earthquake.id)} > Ver comentarios</Button></DialogTrigger>
+                        <DialogContent className="sm:max-w-[600px]">
+                          <DialogHeader>
+                          <CommentsList
+                            comments={bodyComments}
+                            earthquake={earthquake}
+                          />
+                          </DialogHeader>
+                            <DialogFooter className="sm:justify-end">
+                              <DialogClose asChild>
+                                <Button type="button">
+                                  Cerrar
+                                </Button>
+                              </DialogClose>
+                            </DialogFooter>
+                        </DialogContent>
+                      </Dialog>                                            
                   </TableCell>
                 </TableRow>
 
