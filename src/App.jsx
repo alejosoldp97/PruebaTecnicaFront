@@ -20,7 +20,7 @@ function App() {
   const [currentPage, setCurrentPage] = useState(1)
   const [perPage, setPerPage] = useState(10)
   const [error, setError] = useState(false)
-  const [itemsValue, setItemsValue] = useState('')
+  const [itemsValue, setItemsValue] = useState(10)
   const [data, setData] = useState({
     earthquacke_id: '',
     body: ''
@@ -46,12 +46,12 @@ function App() {
       setSelectedOptions(selected);
       const values = selected.map(option => option.value);
       setSelectedValues(values);
-      fetchData(values,inicio,perPage)
+      fetchData(values,inicio,itemsValue)
     };
 
     const handlePageChange = (newPage) => {
       setCurrentPage(newPage);
-      fetchData(selectedValues,newPage);
+      fetchData(selectedValues,newPage,itemsValue);
     };
 
   const fetchData = async (values,actualPage,itemsPerPage) => {
@@ -62,12 +62,13 @@ function App() {
       });
     }
     try {
-      const response = await fetch(`http://localhost:3000/earthquackes?page=${actualPage}&items_per_page=${itemsPerPage}&${params}`);
+      const response = await fetch(`http://localhost:3000/earthquackes?page=${actualPage}&per_page=${itemsPerPage}&${params}`);
       const data = await response.json();
       setEarthquakes(data.data);
       setCurrentPage(data.pagination.current_page);
       setPerPage(data.pagination.per_page);
       setTotalPages(data.pagination.total);
+      console.log(data.pagination)
     } catch (error) {
       console.error('Error fetching earthquake data:', error);
     }
@@ -149,7 +150,27 @@ function App() {
       setError(false);
     }
   }; 
-
+  const handleSumbitItems = () => {
+    console.log("enviando items")
+    console.log(selectedValues)
+    console.log(inicio)
+    console.log(itemsValue)
+    if(!error){
+      fetchData(selectedValues, inicio, itemsValue)
+    }else{
+      toast.error('El número de items es incorrecto', {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: undefined,
+        });
+    }
+  }
   return (
     <>
       <div>
@@ -166,7 +187,7 @@ function App() {
             label="Items por página"
             defaultValue={10}
           />
-          <Button>Establecer Valor</Button>
+          <Button onClick={() => handleSumbitItems()}>Establecer Valor</Button>
       </div>
       <div className=' py-6'>
         <PaginationComponent
@@ -197,7 +218,7 @@ function App() {
           <TableBody>
             {
               earthquakes.map((earthquake) =>(
-                <TableRow key={earthquake.attributes.title}>
+                <TableRow key={earthquake.attributes.external_id}>
                   <TableCell >{earthquake.attributes.title}</TableCell>
                   <TableCell >{earthquake.attributes.place}</TableCell>
                   <TableCell>{earthquake.attributes.magnitude}</TableCell>
