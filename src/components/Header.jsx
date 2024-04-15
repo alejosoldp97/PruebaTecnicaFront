@@ -1,13 +1,19 @@
-import { TextField } from '@mui/material'
+import { TextField, ThemeProvider, createTheme } from '@mui/material'
 import React from 'react'
 import { Button } from '../src/components/ui/button'
 import { IconMoon, IconSunHigh } from '@tabler/icons-react'
 
 const Header = ({handleItemsChange, handleSumbitItems, error, setTheme, theme}) => {
+    const themeConfig = createTheme({
+        palette: {
+          mode: theme,
+        },
+      });
+    
   return (
     <div>
-    <div className=' flex justify-center items-center'>
-        <h1 className=' text-5xl mt-8 text-center'>Información Sísmica</h1>
+    <div className=' flex justify-between items-center'>
+        <h1 className=' text-5xl mt-8 text-center ml-5'>Información Sísmica</h1>
         <Button 
         variant="ghost"
         size="icon"
@@ -21,6 +27,7 @@ const Header = ({handleItemsChange, handleSumbitItems, error, setTheme, theme}) 
       </div>
       <div className=' mt-5 flex items-center justify-center gap-5'>
         <span className=' '>Selecciona el número de items por página: </span>
+        <ThemeProvider theme={themeConfig}>
         <TextField className="text-white border border-white rounded-md px-4 py-2 shadow-md bg-transparent"
             type="number"
             onChange={(e) => handleItemsChange(e)}
@@ -30,6 +37,7 @@ const Header = ({handleItemsChange, handleSumbitItems, error, setTheme, theme}) 
             label="Items por página"
             defaultValue={10}
           />
+          </ThemeProvider>
           <Button onClick={() => handleSumbitItems()}>Establecer Valor</Button>
     </div>
     </div>
