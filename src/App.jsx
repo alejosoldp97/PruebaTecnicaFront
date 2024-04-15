@@ -36,9 +36,6 @@ function App() {
   // const values = selectedOptions.map(option => option.value);
   //   setSelectedValues(values);
   
-  const handleThemeChange = () => {
-    setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light')
-  }
   
   const fetchData = async (values,actualPage,itemsPerPage) => {
     const params = new URLSearchParams();
@@ -66,8 +63,8 @@ function App() {
     }else{
       document.querySelector('html').classList.remove('dark')
     }
-  
-  
+    
+    
   }, [theme])
   
   
@@ -97,8 +94,12 @@ function App() {
     
   }
   
+  const handleThemeChange = () => {
+    setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light')
+  }
+  
   const handleSelectChange = (selected) => {
-      setSelectedOptions(selected);
+    setSelectedOptions(selected);
       const values = selected.map(option => option.value);
       setSelectedValues(values);
       fetchData(values,inicio,itemsValue)
