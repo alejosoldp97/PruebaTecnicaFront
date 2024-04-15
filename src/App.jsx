@@ -35,22 +35,11 @@ function App() {
   const [selectedValues, setSelectedValues] = useState([]);
   // const values = selectedOptions.map(option => option.value);
   //   setSelectedValues(values);
-  const handleSelectChange = (selected) => {
-      setSelectedOptions(selected);
-      const values = selected.map(option => option.value);
-      setSelectedValues(values);
-      fetchData(values,inicio,itemsValue)
-    };
-
-    const handlePageChange = (newPage) => {
-      setCurrentPage(newPage);
-      fetchData(selectedValues,newPage,itemsValue);
-    };
-
-    const handleThemeChange = () => {
-      setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light')
-    }
-
+  
+  const handleThemeChange = () => {
+    setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light')
+  }
+  
   const fetchData = async (values,actualPage,itemsPerPage) => {
     const params = new URLSearchParams();
     if (values.length > 0) {
@@ -70,7 +59,7 @@ function App() {
       console.error('Error fetching earthquake data:', error);
     }
   };
-
+  
   useEffect(() => {
     if(theme === 'dark'){
       document.querySelector('html').classList.add('dark')
@@ -81,7 +70,7 @@ function App() {
   
   }, [theme])
   
-
+  
   useEffect(() => {
     const FirtsFetch = async () => {try {
       const response = await fetch(`http://localhost:3000/api/v1/earthquakes`);
@@ -94,7 +83,7 @@ function App() {
     }}
     FirtsFetch()
   },[])
-
+  
   
   const fetchGetComments = async (eId) => {
     try {
@@ -108,6 +97,18 @@ function App() {
     
   }
   
+  const handleSelectChange = (selected) => {
+      setSelectedOptions(selected);
+      const values = selected.map(option => option.value);
+      setSelectedValues(values);
+      fetchData(values,inicio,itemsValue)
+    };
+
+    const handlePageChange = (newPage) => {
+      setCurrentPage(newPage);
+      fetchData(selectedValues,newPage,itemsValue);
+    };
+
   const handleEarthquackeId = (eId) =>{
     setData({...data, earthquake_id: eId, body:''})
   }
@@ -194,12 +195,14 @@ function App() {
     }
   }
   return (
-    <div className=' text-black'>
+    <div className='text-black dark:text-white'>
       
       <Header
         handleItemsChange={handleItemsChange}
         handleSumbitItems={handleSumbitItems}
         error={error}
+        setTheme={setTheme}
+        theme={theme}
       />  
       <Body
         earthquakes={earthquakes}

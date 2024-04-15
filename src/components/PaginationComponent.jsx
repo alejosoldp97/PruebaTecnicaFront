@@ -7,7 +7,7 @@ const PaginationComponent = ({ totalPages, currentPage, onPageChange }) => {
   const pages = Array.from({ length: totalPages });
 
   return (
-    <Pagination>
+    <Pagination className=' cursor-pointer'>
       <PaginationContent>
         {currentPage > 1 && (
           <PaginationPrevious onClick={() => onPageChange(currentPage - 1)} disabled={currentPage === 1} />

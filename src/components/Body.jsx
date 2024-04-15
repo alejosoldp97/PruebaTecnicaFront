@@ -65,7 +65,7 @@ const Body = ({
                         <DialogTrigger asChild><Button variant="secondary" className='w-52 mb-3' onClick={() => handleEarthquackeId(earthquake.id)} > Agregar un comentario</Button></DialogTrigger>
                         <DialogContent className="sm:max-w-[600px]">
                           <DialogHeader>
-                            <DialogTitle>Añade tu comentario del sismo {earthquake.attributes.title}</DialogTitle>
+                            <DialogTitle className='dark:text-white'>Añade tu comentario del sismo {earthquake.attributes.title} </DialogTitle>
                             <DialogDescription>
                               <Textarea className='mt-5' placeholder="Escribe tu comentario aqui." onChange={(e)=>handleCommentArea(e)} />
                             </DialogDescription>

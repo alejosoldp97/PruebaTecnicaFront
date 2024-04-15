@@ -7,10 +7,10 @@ const CommentsList = ({comments, earthquake}) => {
   return (
     <ScrollArea className="h-72 rounded-md border w-auto">
       <div className="p-4">
-        <h4 className="mb-4 text-md font-medium leading-none text-center">Comentarios del sismo {earthquake.title} </h4>
+        <h4 className="mb-4 text-md font-medium leading-none text-center dark:text-white">Comentarios del sismo {earthquake.title} </h4>
         {comments.map((comment) => (
           <>
-            <div key={comment} className="text-sm">
+            <div key={comment} className="text-sm dark:text-white">
               {comment}
             </div>
             <Separator className="my-2" />
