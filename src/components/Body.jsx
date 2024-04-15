@@ -24,7 +24,7 @@ const Body = ({
 }) => {
   return (
     <div>
-        <div className=' py-6'>
+        <div className=' py-6 ml-5 mr-5'>
         <PaginationComponent
           totalPages={totalPages}
           currentPage={currentPage}
