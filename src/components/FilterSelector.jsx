@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-const FilterSelector = ({ options}) => {
+const FilterSelector = ({ options }) => {
   const [selectedOptions, setSelectedOptions] = useState([]);
 
   const handleOptionChange = (e) => {
-    const selected = Array.from(e.target.selectedOptions, (option) => option.value);
+    const selected = Array.from(
+      e.target.selectedOptions,
+      (option) => option.value
+    );
     setSelectedOptions(selected);
   };
 
