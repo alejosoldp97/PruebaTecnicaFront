@@ -39,14 +39,14 @@ const Body = ({
     <div>
       <div className=" py-6 ml-5 mr-5">
         
-        <Table className=" mt-5 text-left">
+        <Table className=" mt-5 text-center">
           <TableCaption>Datos sísmicos</TableCaption>
           <TableHeader>
             <TableRow>
-              <TableHead>Titulo</TableHead>
-              <TableHead>Lugar</TableHead>
-              <TableHead>Magnitud</TableHead>
-              <TableHead>
+              <TableHead className='text-center'>Título</TableHead>
+              <TableHead className='text-center'>Lugar</TableHead>
+              <TableHead className='text-center'>Magnitud</TableHead>
+              <TableHead className='text-center'>
                 <Select
                   className=" w-40"
                   placeholder="Tipo de Magnitud"
@@ -56,16 +56,16 @@ const Body = ({
                   onChange={handleSelectChange}
                 />
               </TableHead>
-              <TableHead>Latitud</TableHead>
-              <TableHead>Longitud</TableHead>
-              <TableHead>Comentarios</TableHead>
+              <TableHead className='text-center'>Latitud</TableHead>
+              <TableHead className='text-center'>Longitud</TableHead>
+              <TableHead className='text-center'>Comentarios</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {earthquakes.map((earthquake) => (
               <TableRow key={earthquake.attributes.external_id}>
-                <TableCell>{earthquake.attributes.title}</TableCell>
-                <TableCell>{earthquake.attributes.place}</TableCell>
+                <TableCell className='text-left'>{earthquake.attributes.title}</TableCell>
+                <TableCell className='text-left'>{earthquake.attributes.place}</TableCell>
                 <TableCell>{earthquake.attributes.magnitude}</TableCell>
                 <TableCell>{earthquake.attributes.mag_type}</TableCell>
                 <TableCell>
@@ -79,7 +79,7 @@ const Body = ({
                     <DialogTrigger asChild>
                       <Button
                         variant="secondary"
-                        className="w-52 mb-3"
+                        className="w-52 mb-3 2xl:ml-4"
                         onClick={() => handleEarthquackeId(earthquake.id)}
                       >
                         {" "}

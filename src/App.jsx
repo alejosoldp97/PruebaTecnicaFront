@@ -109,10 +109,7 @@ function App() {
         theme: "light",
         transition: undefined,
       });
-      setDialogMessage("Comentario creado correctamente");
     } else {
-      const errorData = await response.json();
-      setDialogMessage("Error al crear el comentario");
       toast.error("Error al crear el comentario", {
         position: "top-center",
         autoClose: 2000,
